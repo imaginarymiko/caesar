@@ -12,6 +12,29 @@ extern const float ENGLISH_FREQUENCIES[26];
 
 enum class ConversionType { Caesar, Vigenere, Decrypt };
 
+void printHelp() {
+    std::cout << "Caesar Cipher (C++)\n";
+    std::cout << "Usage:\n";
+    std::cout << "    ./caesar\n";
+    std::cout << "    ./caesar -f <filename> <conversion> <key/all>\n";
+    std::cout << "\n";
+    std::cout << "    If no argument is given, the program will prompt the user for text.\n";
+    std::cout << "    If the flag -f and a file name is given, the program will read the text from the file.\n";
+    std::cout << "\n";
+    std::cout << "    The conversion argument can be:\n";
+    std::cout << "        for Caesar encryption: '-c' '-caesar' 'c' 'caesar'\n";
+    std::cout << "        for Vigenere encryption: '-v' '-vigenere' 'v' 'vigenere'\n";
+    std::cout << "        for Caesar decryption: '-d' '-decrypt' 'd' 'decrypt'\n";
+    std::cout << "\n";
+    std::cout << "    For Caesar encryption, the key must be an integer.\n";
+    std::cout << "    For Vigenere encryption, the key must be a string of alphabetic characters.\n";
+    std::cout << "\n";
+    std::cout << "    For Caesar decryption, to show all results provide either '-a', '-all', 'a' or 'all' as a flag. \n";
+    std::cout << "    Otherwise, to not show all results, do not provide any flags.\n";
+    std::cout << "\n";
+    std::cout << "    The program will then carry out the conversion and output the result." << std::endl;
+}    
+
 void displayResults(const std::vector<std::tuple<int, std::string, double>>& results, bool all) {
     std::cout << std::setw(10) << "Key" << std::setw(15) << "Decrypted Text" << std::setw(15) << "Entropy" << std::endl;
     std::cout << std::string(40, '-') << std::endl;
@@ -109,6 +132,13 @@ int main(int argc, char** argv) {
             std::vector<std::tuple<int, std::string, double>> results;
             ct.fillResults(results);
             displayResults(results, false);
+        } else if (argc == 2) {
+            flag = argv[1];
+            if (!(flag == "-h" || flag == "-help" || flag == "h" || flag == "help")) {
+                throw std::invalid_argument("Invalid flag:" + flag);
+            } else {
+                printHelp();
+            }
         } else if (argc == 1) {
             while (true) {
                 std::cout << "Enter text: " << std::endl;
