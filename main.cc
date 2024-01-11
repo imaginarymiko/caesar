@@ -2,7 +2,6 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
-#include <tuple>
 #include <algorithm>
 #include <iomanip>
 #include <filesystem>

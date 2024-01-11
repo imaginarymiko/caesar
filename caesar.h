@@ -1,9 +1,9 @@
 #pragma once
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include <cmath>
 #include <tuple>
-#include <compare>
 #include <vector>
 #include <algorithm>
 
