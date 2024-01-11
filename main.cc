@@ -16,7 +16,7 @@ void printHelp() {
     std::cout << "Caesar Cipher (C++)\n";
     std::cout << "Usage:\n";
     std::cout << "    caesar\n";
-    std::cout << "    caesar <-h/-help/h/help>"
+    std::cout << "    caesar <-h/-help/h/help>\n";
     std::cout << "    caesar -f <filename> <conversion> <key/all>\n";
     std::cout << "\n";
     std::cout << "    If no argument is given, the program will prompt the user for text.\n";
