@@ -146,27 +146,32 @@ int main(int argc, char** argv) {
             while (true) {
                 std::cout << "Enter text: " << std::endl;
                 std::getline(std::cin, text);
+                if (text.empty()) break;
                 ct.setText(text);
-                std::cout << "Original text: " << text << std::endl;
                 std::cout << "Select conversion type (Caesar encryption, Vigenere encryption, Caesar decryption): " << std::endl;
                 std::cin >> conversion;
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 ConversionType type = getConversionType(conversion);
                 switch (type) {
                     case ConversionType::Caesar:
                         std::cout << "Enter key: " << std::endl;
                         std::cin >> key;
+                        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                         if (!isConvertibleToInt(key)) {
                             throw std::invalid_argument("Invalid key:" + key);
                         }
+                        std::cout << "Original text: " << text << std::endl;
                         std::cout << "Key: " << key << std::endl;
                         std::cout << "Encrypted text: " << ct.shiftText(std::stoi(key)) << std::endl;
                         break;
                     case ConversionType::Vigenere:
                         std::cout << "Enter key: " << std::endl;
                         std::cin >> key;
+                        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                         if (!isAlphabet(key)) {
                             throw std::invalid_argument("Invalid key:" + key);
                         }
+                        std::cout << "Original text: " << text << std::endl;
                         std::cout << "Key: " << key << std::endl;
                         std::cout << "Encrypted text: " << ct.encryptVigenere(key) << std::endl;
                         break;
@@ -174,6 +179,7 @@ int main(int argc, char** argv) {
                         std::cout << "Show all results? (y/n)" << std::endl;
                         std::string flag;
                         std::cin >> flag;
+                        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                         if (flag == "y" || flag == "yes") {
                             std::vector<std::tuple<int, std::string, double>> results;
                             ct.fillResults(results);
@@ -191,6 +197,7 @@ int main(int argc, char** argv) {
         } else {
             throw std::invalid_argument("Invalid arguments count.");
         }
+        return 0;
     } catch (const std::invalid_argument& e) {
         std::cerr << e.what() << std::endl;
         return 1;
