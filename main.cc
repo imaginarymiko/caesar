@@ -15,11 +15,14 @@ enum class ConversionType { Caesar, Vigenere, Decrypt };
 void printHelp() {
     std::cout << "Caesar Cipher (C++)\n";
     std::cout << "Usage:\n";
-    std::cout << "    ./caesar\n";
-    std::cout << "    ./caesar -f <filename> <conversion> <key/all>\n";
+    std::cout << "    caesar\n";
+    std::cout << "    caesar <-h/-help/h/help>"
+    std::cout << "    caesar -f <filename> <conversion> <key/all>\n";
     std::cout << "\n";
     std::cout << "    If no argument is given, the program will prompt the user for text.\n";
     std::cout << "    If the flag -f and a file name is given, the program will read the text from the file.\n";
+    std::cout << "\n";
+    std::cout << "    To output the help message, provide either '-h', '-help', 'h', 'help' as a flag.\n";
     std::cout << "\n";
     std::cout << "    The conversion argument can be:\n";
     std::cout << "        for Caesar encryption: '-c' '-caesar' 'c' 'caesar'\n";
