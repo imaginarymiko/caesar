@@ -1,4 +1,3 @@
 /caesar
-/caesar.d
-/main.d
-/main.o
+/caesar.exe
+build/

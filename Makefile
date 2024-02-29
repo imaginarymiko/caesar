@@ -1,19 +1,35 @@
-CXX = g++-12 -std=c++20
-CXXFLAGS = -Wall -g -MMD  # use -MMD to generate dependencies
-SOURCES = $(wildcard *.cc)   # list of all .cc files in the current directory
-OBJECTS = ${SOURCES:.cc=.o}  # .o files depend upon .cc files with same names
-DEPENDS = ${OBJECTS:.o=.d}   # .d file is list of dependencies for corresponding .cc file
-EXEC=caesar
+CXX = g++-12
+CXXFLAGS = -std=c++20 -Wall -g -MMD
+SRC_DIR = src
+BUILD_DIR = build
+EXEC = caesar
 
-# First target in the makefile is the default target.
+# Find all source files in the source directory
+SOURCES = $(wildcard $(SRC_DIR)/*.cc)
+
+# Generate a list of corresponding object files in the build directory
+OBJECTS = $(patsubst $(SRC_DIR)/%.cc,$(BUILD_DIR)/%.o,$(SOURCES))
+
+# Dependency files
+DEPENDS = $(OBJECTS:.o=.d)
+
+# Default target
+all: $(EXEC)
+
+# Linking object files to create the executable
 $(EXEC): $(OBJECTS)
-	$(CXX) $(CXXFLAGS) $(OBJECTS) -o $(EXEC)
+	$(CXX) $(CXXFLAGS) $^ -o $@
 
-%.o: %.cc 
-	$(CXX) -c -o $@ $< $(CXXFLAGS)
+# Compiling each source file into object files
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cc
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
--include ${DEPENDS}
+# Include dependency files
+-include $(DEPENDS)
 
 .PHONY: clean 
 clean:
-	rm  -f $(OBJECTS) $(DEPENDS) $(EXEC)
+	rm -rf $(BUILD_DIR) $(EXEC)
+
+# Create the build directory if it does not exist
+$(shell mkdir -p $(BUILD_DIR))
