@@ -5,7 +5,7 @@
 #include <algorithm>
 #include <iomanip>
 #include <filesystem>
-#include "caesar.h"
+#include "caesar.hh"
 
 extern const float ENGLISH_FREQUENCIES[26];
 
@@ -46,27 +46,20 @@ void displayResults(const std::vector<std::tuple<int, std::string, double>>& res
     }
 }
 
-bool isConvertibleToInt(const std::string& str) {
-    std::istringstream iss(str);
+bool isConvertibleToInt(const std::string& s) {
+    std::istringstream iss(s);
     int value;
     iss >> value;
     return !iss.fail() && iss.eof();
 }
 
-bool isAlphabet(const std::string& str) {
-    return std::all_of(str.begin(), str.end(), [](char c) { return std::isalpha(c); });
-}
+bool isAlphabet(const std::string& s) { return std::all_of(s.begin(), s.end(), [](char c) -> bool { return std::isalpha(c); }); }
 
 ConversionType getConversionType(const std::string& conversion) {
-    if (conversion == "-c" || conversion == "-caesar" || conversion == "c" || conversion == "caesar") {
-        return ConversionType::Caesar;
-    } else if (conversion == "-v" || conversion == "-vigenere" || conversion == "v" || conversion == "vigenere") {
-        return ConversionType::Vigenere;
-    } else if (conversion == "-d" || conversion == "-decrypt" || conversion == "d" || conversion == "decrypt") {
-        return ConversionType::Decrypt;
-    } else {
-        throw std::invalid_argument("Invalid conversion type:" + conversion);
-    }
+    if (conversion == "-c" || conversion == "-caesar" || conversion == "c" || conversion == "caesar") return ConversionType::Caesar;
+    else if (conversion == "-v" || conversion == "-vigenere" || conversion == "v" || conversion == "vigenere") return ConversionType::Vigenere;
+    else if (conversion == "-d" || conversion == "-decrypt" || conversion == "d" || conversion == "decrypt") return ConversionType::Decrypt;
+    else throw std::invalid_argument("Invalid conversion type:" + conversion);
 }
 
 int main(int argc, char** argv) {
@@ -78,12 +71,8 @@ int main(int argc, char** argv) {
             filename = argv[2];
             conversion = argv[3];
             key = argv[4];
-            if (!(flag == "-f" || flag == "-file" || flag == "f" || flag == "file")) {
-                throw std::invalid_argument("Invalid flag:" + flag);
-            }
-            if (!std::filesystem::exists(filename)) {
-                throw std::invalid_argument("Invalid file:" + filename);
-            }
+            if (!(flag == "-f" || flag == "-file" || flag == "f" || flag == "file")) throw std::invalid_argument("Invalid flag:" + flag);
+            if (!std::filesystem::exists(filename)) throw std::invalid_argument("Invalid file:" + filename);
             std::ifstream file_stream(filename);
             std::string file_contents((std::istreambuf_iterator<char>(file_stream)), std::istreambuf_iterator<char>());
             ct.setText(file_contents);
@@ -91,23 +80,17 @@ int main(int argc, char** argv) {
             ConversionType type = getConversionType(conversion);
             switch (type) {
                 case ConversionType::Caesar: 
-                    if (!isConvertibleToInt(key)) {
-                        throw std::invalid_argument("Invalid key:" + key);
-                    }
+                    if (!isConvertibleToInt(key)) throw std::invalid_argument("Invalid key:" + key);
                     std::cout << "Key: " << key << std::endl;
                     std::cout << "Encrypted text: " << ct.shiftText(std::stoi(key)) << std::endl;
                     break;
                 case ConversionType::Vigenere:
-                    if (!isAlphabet(key)) {
-                        throw std::invalid_argument("Invalid key:" + key);
-                    }
+                    if (!isAlphabet(key)) throw std::invalid_argument("Invalid key:" + key);
                     std::cout << "Key: " << key << std::endl;
                     std::cout << "Encrypted text: " << ct.encryptVigenere(key) << std::endl;
                     break;
                 case ConversionType::Decrypt:
-                    if (key != "-a" || key != "-all" || key != "a" || key != "all") {
-                        throw std::invalid_argument("Invalid flag: " + key);
-                    }
+                    if (key != "-a" || key != "-all" || key != "a" || key != "all") throw std::invalid_argument("Invalid flag: " + key);
                     std::vector<std::tuple<int, std::string, double>> results;
                     ct.fillResults(results);
                     displayResults(results, true);
@@ -117,30 +100,21 @@ int main(int argc, char** argv) {
             flag = argv[1];
             filename = argv[2];
             conversion = argv[3];
-            if (!(flag == "-f" || flag == "-file" || flag == "f" || flag == "file")) {
-                throw std::invalid_argument("Invalid flag:" + flag);
-            }
-            if (!std::filesystem::exists(filename)) {
-                throw std::invalid_argument("Invalid file:" + filename);
-            }
+            if (!(flag == "-f" || flag == "-file" || flag == "f" || flag == "file")) throw std::invalid_argument("Invalid flag:" + flag);
+            if (!std::filesystem::exists(filename)) throw std::invalid_argument("Invalid file:" + filename);
             std::ifstream file_stream(filename);
             std::string file_contents((std::istreambuf_iterator<char>(file_stream)), std::istreambuf_iterator<char>());
             ct.setText(file_contents);
             std::cout << "Original text: " << file_contents << std::endl;
             ConversionType type = getConversionType(conversion);
-            if (type != ConversionType::Decrypt) {
-                throw std::invalid_argument("Invalid arguments count.");
-            }
+            if (type != ConversionType::Decrypt) throw std::invalid_argument("Invalid arguments count.");
             std::vector<std::tuple<int, std::string, double>> results;
             ct.fillResults(results);
             displayResults(results, false);
         } else if (argc == 2) {
             flag = argv[1];
-            if (!(flag == "-h" || flag == "-help" || flag == "h" || flag == "help")) {
-                throw std::invalid_argument("Invalid flag:" + flag);
-            } else {
-                printHelp();
-            }
+            if (!(flag == "-h" || flag == "-help" || flag == "h" || flag == "help")) throw std::invalid_argument("Invalid flag:" + flag);
+            else printHelp();
         } else if (argc == 1) {
             while (true) {
                 std::cout << "Enter text: " << std::endl;
@@ -156,9 +130,7 @@ int main(int argc, char** argv) {
                         std::cout << "Enter key: " << std::endl;
                         std::cin >> key;
                         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                        if (!isConvertibleToInt(key)) {
-                            throw std::invalid_argument("Invalid key:" + key);
-                        }
+                        if (!isConvertibleToInt(key)) throw std::invalid_argument("Invalid key:" + key);
                         std::cout << "Original text: " << text << std::endl;
                         std::cout << "Key: " << key << std::endl;
                         std::cout << "Encrypted text: " << ct.shiftText(std::stoi(key)) << std::endl;
@@ -167,9 +139,7 @@ int main(int argc, char** argv) {
                         std::cout << "Enter key: " << std::endl;
                         std::cin >> key;
                         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                        if (!isAlphabet(key)) {
-                            throw std::invalid_argument("Invalid key:" + key);
-                        }
+                        if (!isAlphabet(key)) throw std::invalid_argument("Invalid key:" + key);
                         std::cout << "Original text: " << text << std::endl;
                         std::cout << "Key: " << key << std::endl;
                         std::cout << "Encrypted text: " << ct.encryptVigenere(key) << std::endl;
@@ -187,18 +157,17 @@ int main(int argc, char** argv) {
                             std::vector<std::tuple<int, std::string, double>> results;
                             ct.fillResults(results);
                             displayResults(results, false);
-                        } else {
-                            throw std::invalid_argument("Invalid flag: " + flag);
-                        }
+                        } else throw std::invalid_argument("Invalid flag: " + flag);
                         break;
                 }
             }
-        } else {
-            throw std::invalid_argument("Invalid arguments count.");
-        }
+        } else throw std::invalid_argument("Invalid arguments count.");
         return 0;
     } catch (const std::invalid_argument& e) {
         std::cerr << e.what() << std::endl;
         return 1;
+    } catch (...) {
+        std::cerr << "Unknown error" << std::endl;
+        return -1;
     }
 }

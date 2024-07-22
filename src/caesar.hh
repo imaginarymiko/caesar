@@ -21,16 +21,16 @@ class CaesarText {
   public:
     // Constructors
     CaesarText();
-    CaesarText(std::string& text);
+    CaesarText(const std::string& text);
 
     // Accessors
     std::string getText() const;
-    void setText(std::string text);
+    void setText(const std::string& text);
 
     // Methods
     void print() const;
     float getEntropy() const;
     std::string shiftText(int shift) const;
-    std::string encryptVigenere(std::string key) const;
+    std::string encryptVigenere(const std::string& key) const;
     void fillResults(std::vector<std::tuple<int, std::string, double>>& results) const;
 };
