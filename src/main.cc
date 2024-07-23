@@ -38,11 +38,14 @@ void printHelp() {
 }    
 
 void displayResults(const std::vector<std::tuple<int, std::string, double>>& results, bool all) {
-    std::cout << std::setw(10) << "Key" << std::setw(15) << "Decrypted Text" << std::setw(15) << "Entropy" << std::endl;
-    std::cout << std::string(40, '-') << std::endl;
+    std::cout << std::setw(10) << "Key" << std::setw(25) << "Decrypted Text" << std::setw(15) << "Entropy" << std::endl;
+    std::cout << std::string(50, '-') << std::endl;
     size_t limit = all ? results.size() : std::min(results.size(), static_cast<size_t>(3));
     for (size_t i = 0; i < limit; ++i) {
-        std::cout << std::setw(10) << std::get<0>(results[i]) << std::setw(15) << std::get<1>(results[i]) << std::setw(15) << std::get<2>(results[i]) << std::endl;
+        std::cout << std::setw(10) << std::get<0>(results[i])
+                  << std::setw(25) << std::get<1>(results[i])
+                  << std::setw(15) << std::fixed << std::setprecision(5) << std::get<2>(results[i])
+                  << std::endl;
     }
 }
 

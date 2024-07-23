@@ -9,6 +9,7 @@ int letterToIndex(char letter) {
 
 // Constructors
 CaesarText::CaesarText(): text{""} {}
+
 CaesarText::CaesarText(const std::string& text): text{text} {}
 
 // Accessors
@@ -29,6 +30,7 @@ float CaesarText::getEntropy() const {
     }
     return - sum / std::log(2) / (this->text.length() - ignored);
 }
+
 std::string CaesarText::shiftText(int shift) const {
     // Shifts the text by a given amount
     std::string newText = "";
@@ -39,6 +41,7 @@ std::string CaesarText::shiftText(int shift) const {
     }
     return newText;
 }
+
 std::vector<int> generateKey(const std::string& text) {
     // Generates a key for the Vigenere cipher
     std::vector<int> key;
@@ -48,6 +51,7 @@ std::vector<int> generateKey(const std::string& text) {
     }
     return key;
 }
+
 std::string CaesarText::encryptVigenere(const std::string& key) const {
     // Encrypts the text using the Vigenere cipher
     std::string newText = "";
@@ -64,6 +68,7 @@ std::string CaesarText::encryptVigenere(const std::string& key) const {
     }
     return newText;
 }
+
 void CaesarText::fillResults(std::vector<std::tuple<int, std::string, double>>& results) const {
     // Fills the results vector with the entropy of the text shifted by 0-25
     for (int i = 0; i < 26; ++i) {
