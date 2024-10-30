@@ -1,13 +1,11 @@
-#include <iostream>
+#include <algorithm>
+#include <filesystem>
 #include <fstream>
+#include <iomanip>
+#include <iostream>
 #include <sstream>
 #include <vector>
-#include <algorithm>
-#include <iomanip>
-#include <filesystem>
 #include "caesar.hh"
-
-extern const float ENGLISH_FREQUENCIES[26];
 
 enum class ConversionType { Caesar, Vigenere, Decrypt };
 
